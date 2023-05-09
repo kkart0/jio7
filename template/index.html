@@ -1,0 +1,105 @@
+{% extends 'basic.html'%}
+{%block title%}index{%endblock%}
+
+{%block body%}
+<div class="body" style="display: grid;grid-template-columns: 25% auto;margin-top: 110px;">
+    <div class="list" >
+        <ul style="list-style-type: none;position:fixed">
+            <li style="opacity: 50%;font-weight: 500;">BROWSE</li>
+            <li>New Releases</li>
+            <li>playlist</li>
+            <li>podcast</li>
+            <li>radio</li>
+        </ul>
+    </div>
+
+
+    <div class="songs" style="display: flex;flex-wrap: wrap;">
+        <div class="item">
+            <div class="card" style="width: 18rem;">
+                <img src="https://picsum.photos/305" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">cardname</h5>
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+              </div>
+        </div>
+        <div class="item" >
+            <div class="card" style="width: 18rem;">
+                <img src="https://picsum.photos/305" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">{{ songs.0.song_name }}</h5>
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  <a href="#" id="cart" class="btn btn-primary cart">Go somewhere</a>
+                  
+                </div>
+              </div>
+        </div>
+        
+        {% for i in songs|slice:'0:' %}
+        <div class="item">
+        <div class="card" style="width: 18rem;">
+            <img src="/media/{{i.song_coverimage}}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{ i.song_name }}</h5>
+              <p class="card-text">{{i.song_details}}</p>
+              <a href="#" class="btn btn-primary">Go somewhere</a>
+              <audio controls><source src="/media/{{i.song}}"></audio>
+            </div>
+          </div>
+        </div>
+    <!-- {% if forloop.counter|divisibleby:3 and forloop.counter > 0 and not forloop.last %}
+    {% endif %} -->
+    {% endfor %}
+    <!-- {% for prod,range,nSlices in allProd %}
+    <div class="item">
+    <div class="card" style="width: 18rem;">
+        <img src="/media/{{allProd.song_coverimage}}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{ prod.song_name }}</h5>
+          <p class="card-text">{{prod.song_details}}</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <audio controls><source src="/media/{{i.song}}"></audio>
+        </div>
+      </div>
+    </div>  -->
+<!-- {% if forloop.counter|divisibleby:3 and forloop.counter > 0 and not forloop.last %}
+{% endif %} -->
+<!-- {% endfor %} -->
+
+    </div>
+
+</div>
+
+{%endblock%}
+{% block js %}
+
+<script>
+  console.log("jswork")
+  var cart;
+  if(localStorage.getItem("cart")==null){
+    var cart={}
+  }
+  else{cart=JSON.parse(localStorage.setItem("cart"));}
+  $('.cart').click( function(){
+    console.log("clicked");
+    var idstr=this.id.toString();
+    console.log(idstr);
+    if (cart[idstr] != undefinded) {
+      cart[idstr]=cart[idstr]+1;
+    }else{
+      cart[idstr]=1;
+
+    }
+    console.log(cart);
+    localStorage.setItem("cart",JSON.stringify(cart));
+    document.getElementById("cart").innerHTML=Object.keys(cart).length;
+
+
+  });
+  $("#popcart").popover();
+  document.getElementById("popcart").setAttribute("data-content","<h5>cart for your item</h5>");  
+
+</script>
+{% endblock %}
